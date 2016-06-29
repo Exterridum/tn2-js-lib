@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "devDependencies": {
+    "bower": "*",
+    "gulp": "^3.8.5",
+    "gulp-concat": "*",
+    "gulp-babel": "6.1.2",
+    "gulp-sourcemaps": "*",
+    "babel-preset-es2015": "*"
+  },
+  "scripts": {
+    "postInstall": "bower install"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
