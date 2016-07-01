@@ -1,11 +1,11 @@
-let gulp, sourcemaps, babel, concat;
+var gulp, sourcemaps, babel, concat;
 
 gulp = require('gulp');
 sourcemaps = require('gulp-sourcemaps');
 babel = require('gulp-babel');
 concat = require('gulp-concat');
 
-const SRC_DIR = "src";
+const SRC_DIR = "src/**/*.js";
 const DIST_DIR = "dist";
 
 gulp.task('dist', () => {

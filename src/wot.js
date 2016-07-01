@@ -20,7 +20,7 @@ function parseUrl(urlStr) {
     }
 
     if(!protocol) {
-        throw new Error("Invalid protocol in Url", splitUrl[0]);
+        throw new Error("Invalid protocol in Url: " + splitUrl[0]);
     }
 
     return {
@@ -39,7 +39,7 @@ export const wot = {
             case consts.QUIRK_MODE:
                 return new QuirkDatasource(url, protocol);
             default:
-                throw new Error("Invalid mode specified", mode);
+                throw new Error("Invalid mode specified: " + mode);
         }
     }
 };
