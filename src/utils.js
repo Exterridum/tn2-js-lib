@@ -8,3 +8,25 @@ export class CommonUtils {
         return url;
     }
 }
+
+export class Deferred {
+
+    constructor() {
+        this._promise = new Promise((resolve, reject) => {
+            this._resolve = resolve;
+            this._reject = reject;
+        });
+    }
+
+    promise() {
+        return this._promise;
+    }
+
+    reject(data) {
+        this._reject(data);
+    }
+
+    resolve(data) {
+        this._resolve(data);
+    }
+}

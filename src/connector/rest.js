@@ -66,10 +66,10 @@ export class StrictRestConnector extends BaseRestConnector {
         super(url);
     }
 
-    subscribe(topic, callback, ack) {
+    subscribe(topic, callback) {
         this._subscriber = new WebSocketSubscriber(this._url, null);
         this._subscriber.open();
-        this._subscriber.subscribe(topic, callback);
+        return this._subscriber.subscribe(topic, callback);
     }
 }
 
@@ -77,7 +77,7 @@ export class QuirkRestConnector extends BaseRestConnector {
 
     constructor(url, subscriber) {
         super(url);
-        this._subscriber = new WebSocketSubscriber("", callback);
+        this._subscriber = subscriber;
         this._subscriber.open();
     }
 

@@ -1,14 +1,15 @@
 
+import Deferred from '../utils';
+
 const MESSAGE_TYPE = {
-    ACK, 0,
+    ACK: 0,
     DATA: 1
 };
 
 export class WebSocketSubscriber {
 
-    constructor(url, mode) {
+    constructor(url) {
         this._url = url;
-        this._mode = mode;
         this._open = false;
         this._subscriptions = new Map();
     }
@@ -19,18 +20,17 @@ export class WebSocketSubscriber {
             callbacks = [];
             this._subscriptions.set(topic, callbacks);
         }
-        callbacks.push(callback);
-/*
-        return new Promise((resolve, reject) => {
-            resolve.()
-        })*/
+        let deferred = new Deferred();
+        callbacks.push(new Callback(callback, deferred));
+
+        return deferred.promise();
     }
 
     open() {
         let ws = new WebSocket(conf);
         ws.onopen = this._handleOpen;
         ws.onclose = this._handleClose;
-        ws.onmessage = this._handleMessage;
+        ws.onmessage = this._executeCallback;
         this._ws = ws;
     }
 
@@ -54,17 +54,11 @@ export class WebSocketSubscriber {
     }
 
     _handleAckMessage(message) {
-
+        this._executeCallback("resolve", message);
     }
 
     _handleDataMessage(message) {
-        let callbacks = this._subscriptions.get(message.topic);
-
-        if(callbacks) {
-            for(let callback of callbacks) {
-                callback(message);
-            }
-        }
+        this._executeCallback("call", message);
     }
 
     _handleMessage(rawMessage) {
@@ -78,14 +72,42 @@ export class WebSocketSubscriber {
                 this._handleDataMessage(message);
                 break;
         }
-
     }
 
+    _executeCallback(method, message) {
+        let callbacks = this._subscriptions.get(message.topic);
+
+        if(callbacks) {
+            for(let callback of callbacks) {
+                callback[method](message);
+            }
+        }
+    }
 }
 
-class SubscriptionWrapper {
+class Callback {
 
-    constructor() {
+    constructor(callback, deferred) {
+        this._callback = callback;
+        this._deferred = deferred;
+    }
 
+    call(message) {
+        if(this._callback) {
+            this._callback(message);
+        }
+    }
+
+    resolve() {
+        this._deferred.resolve();
+        this._deferred = null;
+    }
+
+    get callback() {
+        return this._callback;
+    }
+
+    get deferred() {
+        return this._deferred;
     }
 }
