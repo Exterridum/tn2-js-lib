@@ -1,45 +1,35 @@
+import * as factory from "./connector/factory"
 
-import * as consts from "consts";
+class WebOfThings {
 
-function parseUrl(urlStr) {
-    if(!(url instanceof String)) {
-       throw new Error("Invalid Url type");
+    constructor() {
+        this._things = new Map();
     }
 
-    let splitUrl = urlStr.split(":");
-    if(splitUrl.length == 0 &&
-       splitUrl.length > 2) {
-        throw new Error("Invalid Url structure");
+    discover(type, filter = {}) {
     }
 
-    let protocol;
-    for(let p of consts.PROTOCOLS) {
-        if(p === splitUrl[0]) {
-            protocol = p;
-        }
+    consumeDescription(description = {}) {
+        
     }
 
-    if(!protocol) {
-        throw new Error("Invalid protocol in Url: " + splitUrl[0]);
-    }
+    consumeDescriptionUri(url) {
+        return new Promise((resolve, reject) => {
+            fetch(url)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((description) => {
 
-    return {
-        protocol: protocol,
-        url: splitUrl[1]
-    };
+                }).catch((err) => {
+                throw new Error(err);
+            });
+
+            this._things.put(uri, thing);
+
+            resolve(new Thing(protocol, url));
+        });
+    }
 }
 
-export const wot = {
-    newInstance: (urlStr, mode) => {
-        let [url, protocol] = parseUrl(urlStr);
-
-        switch (mode) {
-            case consts.STRICT_MODE:
-                return new StrictDatasource(url, protocol);
-            case consts.QUIRK_MODE:
-                return new QuirkDatasource(url, protocol);
-            default:
-                throw new Error("Invalid mode specified: " + mode);
-        }
-    }
-};
+export default new WebOfThings();

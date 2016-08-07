@@ -4,14 +4,18 @@
     "bower": "*",
     "gulp": "^3.8.5",
     "gulp-concat": "*",
-    "gulp-babel": "6.1.2",
+    "gulp-typescript": "*",
     "gulp-sourcemaps": "*",
-    "babel-preset-es2015": "*"
+    "@types/es6-promise": "*",
+    "@types/whatwg-fetch": "*"
   },
   "scripts": {
     "postInstall": "bower install"
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "@types/es6-promise": "0.0.29"
   }
 }

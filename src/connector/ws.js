@@ -1,14 +1,15 @@
-
-import Deferred from '../utils';
+import Connector from "./api";
+import { Deferred } from '../utils';
 
 const MESSAGE_TYPE = {
     ACK: 0,
     DATA: 1
 };
 
-export class WebSocketSubscriber {
+export class WebSocketConnector extends Connector {
 
-    constructor(url) {
+    constructor(protocol, url) {
+        super();
         this._url = url;
         this._open = false;
         this._subscriptions = new Map();
