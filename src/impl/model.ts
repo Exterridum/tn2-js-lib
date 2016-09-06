@@ -1,14 +1,25 @@
 import Model from "../api/model";
-import Protocol from "../connector/protocol";
+import Description from "../api/description";
+import Protocol from "../net/Protocol";
 
-abstract class BaseModel implements Model {
-    name:string;
-    hrefs:Map<Protocol, string>;
-    type:String;
+abstract class ThingModel implements Model {
 
-    getHrefByProtocol(protocol:Protocol) {
-        return this.hrefs.get(protocol);
+    public name: string;
+    public type: any;
+    public hrefs: Array<string>;   
+    private description: Description;
+    public uris: Map<Protocol, string>;
+
+    initialize(model: any, description: Description) {
+        this.name = model.name;
+        this.type = model["@type"];
+        this.hrefs = model.hrefs;
+        this.description = description;
+    }
+  
+    getUriByProtocol(protocol: Protocol) :string {       
+        return null;
     }
 }
 
-export default BaseModel;
+export default ThingModel;

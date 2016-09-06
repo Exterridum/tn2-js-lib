@@ -1,29 +1,31 @@
-var gulp, sourcemaps, typescript, concat;
+var gulp, browserify, babelify, tsify, source;
 
-gulp = require('gulp');
-sourcemaps = require('gulp-sourcemaps');
-typescript = require("gulp-typescript");
-concat = require('gulp-concat');
+gulp = require("gulp");
+tsify = require("tsify");
+babelify = require("babelify");
+browserify = require("browserify");
+source = require("vinyl-source-stream");
 
-const SRC_DIR = "src/**/*.ts";
+const SRC_DIR = "src/";
 const DIST_DIR = "dist/";
+const TEST_DIR = "test/";
 
-gulp.task("ts", () => {
-    var tsResult = gulp.src(SRC_DIR)
-        .pipe(sourcemaps.init())
-        .pipe(typescript({
-            sortOutput: true,
-            target: "ES2015"
-        }));
-
-    return tsResult.js
-        .pipe(concat('output.js'))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(DIST_DIR));
+gulp.task("js", () => {
+    browserify({        
+                 basedir: SRC_DIR,
+                 entries: ['wot/lib.ts'],
+                 standalone : "tno", 
+                 debug: true,
+            })
+            .plugin(tsify)
+            .transform(babelify, { presets: ["es2015"] })
+            .bundle()
+            .pipe(source('bundle.js'))
+            .pipe(gulp.dest("test"));
 });
 
-gulp.task("dist", ["ts"]);
+gulp.task("dist", ["js"]);
 
 gulp.task("dev", () => {
-    gulp.watch(SRC_DIR, ["ts"])
+    gulp.watch(SRC_DIR, ["dist"])
 });
