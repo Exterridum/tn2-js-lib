@@ -1,32 +1,60 @@
 import Events from "../api/event";
-import Protocol from "../connector/protocol";
-import BaseModel from "./model";
+import Protocol from "../net/protocol";
+import Subscription from "../net/subscription";
+import {Resolver} from "../net/resolver";
+import ThingModel from "./model";
 
-export class ThingEvent extends BaseModel implements Events.Event {
+export class ThingEvent extends ThingModel implements Events.Event {
 
-    private listeners: Set<Events.EventListener> = new Set();
+    private callbacks: Set<Events.ListenerCallback> = 
+                new Set<Events.ListenerCallback>();                
+   
+    private subscriptions: Map<Protocol, Subscription> =
+                new Map<Protocol, Subscription>();
 
-    subscribe(eventListener:Events.EventListener, protocol:Protocol) {
-        this.listeners.add(eventListener);        
+    subscribe(listenerCallback :Events.ListenerCallback, protocol:Protocol):void {
+        this.callbacks.add(listenerCallback);
+
+        if(!this.subscriptions.has(protocol)) {
+            Resolver
+                .resolve(protocol)
+                .getEventUri(this.getUriByProtocol(protocol))
+                .then((response) => {            
+                    let links = response.links;                                                      
+                    let subscription = Resolver
+                                        .resolve(Protocol.WS)
+                                        .subscribe(links[0].href, this.handler);                                
+                    this.subscriptions.set(protocol, subscription);
+                });
+        } 
     }
 
-    unsubscribe(eventListener:Events.EventListener) {
-        this.listeners.delete(eventListener);
+    unsubscribe(listenerCallback :Events.ListenerCallback, protocol:Protocol):void {
+        this.callbacks.delete(listenerCallback);
+        
+        if(this.callbacks.size != 0) {                
+            return;
+        }                
+
+        this.findAndClose(protocol);
     }
 
-    unsubscribeAll() {
+    unsubscribeAll(protocol:Protocol):void {
+        this.callbacks = new Set<Events.ListenerCallback>();      
+        this.findAndClose(protocol);
     }
-}
 
-export class ThingEventListener implements Events.EventListener {
-
-    func:Events.ListenerCallback;
-    hashCode:number;
-
-    constructor(func:Events.ListenerCallback, hashCode?:number) {
-        this.func = func;
-        if(this.hashCode == null) {
-            this.hashCode = 0;
+    private findAndClose(protocol:Protocol) {
+        let subscription = this.subscriptions.get(protocol);        
+        if(subscription) {
+            subscription.close();
+            this.subscriptions.delete(protocol);            
         }
+    }
+
+    private handler = (message: any) => {
+       this.callbacks.forEach((value: any, callback: Events.ListenerCallback) => {
+            callback(message);
+        });
     }
 }

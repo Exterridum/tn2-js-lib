@@ -1,13 +1,22 @@
 {
   "private": true,
   "devDependencies": {
+    "babelify": "*",
+    "del": "*",
+    "babel-preset-es2015": "*",
     "bower": "*",
+    "browserify": "*",
+    "express": "*",
+    "express-ws": "*",
+    "tsify": "*",
+    "vinyl-source-stream": "*",
     "gulp": "^3.8.5",
-    "gulp-concat": "*",
     "gulp-typescript": "*",
     "gulp-sourcemaps": "*",
+    "minifyify": "*",
     "@types/es6-promise": "*",
-    "@types/whatwg-fetch": "*"
+    "@types/whatwg-fetch": "*",
+    "@types/es6-collections": "*"    
   },
   "scripts": {
     "postInstall": "bower install"

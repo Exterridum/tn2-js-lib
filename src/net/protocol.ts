@@ -1,5 +1,4 @@
-
-const enum Protocol {
+enum Protocol {
     HTTP,
     HTTPS,
     COAP,

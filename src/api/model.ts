@@ -1,11 +1,12 @@
-import Protocol from "../connector/protocol";
+import Protocol from "../net/protocol";
+import Description from "./description";
 
 interface Model {
     name: string;
-    hrefs: Map<Protocol, string>;
-    type: String;
+    hrefs: Array<string>;
+    type: any;
 
-    getHrefByProtocol(protocol:Protocol);
+    initialize(model: any, description: Description);
 }
 
 export default Model;

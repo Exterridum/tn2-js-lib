@@ -1,18 +1,13 @@
-import Protocol from "../connector/protocol";
+import Protocol from "../net/protocol";
 import Model from "./model";
 
 namespace Events {
     export interface Event extends Model {
-        subscribe(eventListener: EventListener, protocol: Protocol);
-        unsubscribe(eventListener: EventListener);
-        unsubscribeAll();
+        subscribe(listenerCallback: ListenerCallback, protocol: Protocol): void;
+        unsubscribe(listenerCallback: ListenerCallback, protocol:Protocol): void;
+        unsubscribeAll(protocol:Protocol): void;
     }
-
-    export interface EventListener {
-        func: ListenerCallback;
-        hashCode: number;
-    }
-    
+          
     export type ListenerCallback = (value: any) => void;
 }
 

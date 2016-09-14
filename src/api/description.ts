@@ -6,7 +6,7 @@ interface Description {
     getEvent(event: string): Events.Event;
     getAction(action: string): Action;
     getProperty(property: string): Property;
-    getRawDescription(): Object;
+    getRawDescription(): Object;   
 }
 
 export default Description;

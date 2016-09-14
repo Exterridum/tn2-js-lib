@@ -1,7 +1,8 @@
+import Protocol from "../net/Protocol";
 
 interface Property {
-    getValue(): Promise<any>;
-    setValue(value: any): Promise<any>;
+    getValue(protocol: Protocol): Promise<any>;
+    setValue(protocol: Protocol, value: any): Promise<any>;
 }
 
 export default Property;
