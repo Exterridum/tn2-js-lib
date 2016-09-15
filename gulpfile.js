@@ -7,15 +7,13 @@ browserify = require("browserify");
 source = require("vinyl-source-stream");
 
 const SRC_DIR = "src/";
-const DIST_DIR = "dist/";
-const TEST_DIR = "test/";
 
 gulp.task("js", () => {
     browserify({        
                  basedir: SRC_DIR,
                  entries: ['lib/wot-browser.ts'],
                  standalone : "tno", 
-                 debug: true,
+                 debug: true
             })
             .plugin(tsify)
             .transform(babelify, { presets: ["es2015"] })

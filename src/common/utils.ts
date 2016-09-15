@@ -1,9 +1,13 @@
 import Protocol from "../net/protocol";
 
+export class EnumUtils {
+
+}
+
 export class UriUtils {
 
     public static getProtocolFromUri(href: string) : any {
-        let splitHref = href.split(":"); console.log(splitHref);
+        let splitHref = href.split(":");
         if(splitHref.length < 2) {
             return null;
         }        
@@ -13,6 +17,10 @@ export class UriUtils {
                 return Protocol[p];
             }    
         }
+    }
+
+    public static assembleUri(...parts: string[]) : string {
+        return null;
     }
 
     public static getUrisMap(hrefs: Array<string>): Map<Protocol, string> {
@@ -30,6 +38,13 @@ export class UriUtils {
         return result;
     }
 } 
+
+export class CommonUtils {
+
+    public static exists(obj: any) : boolean {
+        return obj !== undefined && obj !== null;
+    }
+}
 
 export class StringUtils {
 

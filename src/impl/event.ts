@@ -23,16 +23,16 @@ export class ThingEvent extends ThingModel implements Events.Event {
                     let links = response.links;                                                      
                     let subscription = Resolver
                                         .resolve(Protocol.WS)
-                                        .subscribe(links[0].href, this.handler);                                
+                                        .subscribe(links[0]["href"], this.handler);
                     this.subscriptions.set(protocol, subscription);
                 });
         } 
     }
-
+    
     unsubscribe(listenerCallback :Events.ListenerCallback, protocol:Protocol):void {
         this.callbacks.delete(listenerCallback);
-        
-        if(this.callbacks.size != 0) {                
+
+        if(this.callbacks.size != 0) {
             return;
         }                
 

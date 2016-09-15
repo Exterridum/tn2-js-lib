@@ -1,10 +1,12 @@
 import Protocol from "../net/protocol";
 import {TrackablePromise} from "./promise";
 import Events from "./event";
+import Encoding from "../encoding/encoding";
 
 interface Thing {
     // custom methods
     setProtocol(protocol: Protocol);
+    setEncoding(encoding: Encoding);
     
     addListener(event: string, listener: Events.ListenerCallback): Thing;
     removeListener(event: string, listener: Events.ListenerCallback): Thing;

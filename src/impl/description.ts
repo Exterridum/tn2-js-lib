@@ -8,6 +8,8 @@ import {ThingEvent} from "./event";
 import {ThingAction} from "./action";
 import {ThingProperty} from "./property";
 import {UriUtils} from "../common/utils";
+import Encoding from "../encoding/encoding";
+import EncodingUtils from "../encoding/utils";
 
 export default class ThingDescription implements Description {
 
@@ -16,12 +18,14 @@ export default class ThingDescription implements Description {
     private properties: Map<string, Property> = new Map<string, Property>();
 
     private uris:Map<Protocol, string>;
+    private encodings:Set<Encoding>;
 
     constructor(private description: any) {
         this.parse("events", "name", this.events, ThingEvent);            
         this.parse("actions", "name", this.actions, ThingAction);            
         this.parse("properties", "name", this.properties, ThingProperty);
         this.uris = UriUtils.getUrisMap(description.uris);
+        this.encodings = EncodingUtils.getEncodings(description.encodings);
     }
 
     getEvent(event:string):Events.Event {
@@ -38,6 +42,20 @@ export default class ThingDescription implements Description {
 
     getRawDescription():Object {
         return this.description;
+    }
+
+    getDefaultEncoding() : Encoding {
+        for(let encoding in this.encodings.values()) {
+            return Encoding[encoding];
+        }
+        throw new TypeError();
+    }
+
+    getDefaultProtocol() : Protocol {
+        for(let protocol in this.uris.keys()) {
+           return Protocol[protocol];
+        }
+        throw new TypeError();
     }
 
     private get(map, name):any {

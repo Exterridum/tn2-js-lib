@@ -1,4 +1,3 @@
-import Protocol from "../net/protocol";
 import Description from "./description";
 
 interface Model {

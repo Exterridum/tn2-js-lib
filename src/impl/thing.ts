@@ -3,17 +3,26 @@ import Protocol from "../net/protocol"
 import {TrackablePromise} from "../api/promise";
 import Events from "../api/event";
 import Description from "../api/description";
+import Encoding from "../encoding/encoding";
+import ThingDescription from "./description";
 
 export default class WebThing implements Thing {
 
     private protocol: Protocol;
+    private encoding: Encoding;
 
     constructor(private description: Description) {
-        this.protocol = Protocol.HTTP;
+        let thingDescription = (<ThingDescription> description);
+        this.protocol = thingDescription.getDefaultProtocol();
+        this.encoding = thingDescription.getDefaultEncoding();
     }
-   
+
     setProtocol(protocol: Protocol) {
        this.protocol = protocol;
+    }
+    
+    setEncoding(encoding: Encoding) {
+        this.encoding = encoding;
     }
 
     addListener(event:string, eventListener:Events.ListenerCallback): Thing {
