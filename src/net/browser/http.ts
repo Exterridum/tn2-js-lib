@@ -1,9 +1,16 @@
 import Connector from "../connector";
 import MessageHandler from "../handler";
 import Subscription from "../subscription";
+import Encoder from "../../encoding/encoder";
 
 export class HttpConnector implements Connector {
-   
+
+    private encoder: Encoder;
+
+    setEncoder(encoder: Encoder) {
+        this.encoder = encoder;
+    }
+
     subscribe(uri: string, handler: MessageHandler) :Subscription {
         return null;
     }       

@@ -1,7 +1,11 @@
 import MessageHandler from "./handler";
 import Subscription from "./subscription";
+import Encoder from "../encoding/encoder";
 
-interface Connector {    
+interface Connector {
+
+    setEncoder(encoder: Encoder);
+
     subscribe(uri: string, messageHandler: MessageHandler) : Subscription;   
     getLinks(uri: string) : Promise<any>; 
     getThing(uri: string) : Promise<any>;
@@ -11,3 +15,7 @@ interface Connector {
 }
 
 export default Connector;
+
+abstract class BaseConnector {
+
+}

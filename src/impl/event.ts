@@ -3,6 +3,7 @@ import Protocol from "../net/protocol";
 import Subscription from "../net/subscription";
 import {Resolver} from "../net/resolver";
 import ThingModel from "./model";
+import Encoding from "../encoding/encoding";
 
 export class ThingEvent extends ThingModel implements Events.Event {
 
@@ -12,17 +13,18 @@ export class ThingEvent extends ThingModel implements Events.Event {
     private subscriptions: Map<Protocol, Subscription> =
                 new Map<Protocol, Subscription>();
 
-    subscribe(listenerCallback :Events.ListenerCallback, protocol:Protocol):void {
+    subscribe(listenerCallback :Events.ListenerCallback, protocol:Protocol, encoding: Encoding):void {
         this.callbacks.add(listenerCallback);
 
         if(!this.subscriptions.has(protocol)) {
             Resolver
-                .resolve(protocol)
+                .resolve(protocol, encoding)
                 .getEventUri(this.getUriByProtocol(protocol))
                 .then((response) => {            
                     let links = response.links;                                                      
                     let subscription = Resolver
-                                        .resolve(Protocol.WS)
+                                        .resolve(Protocol.WS, encoding)
+                                        // todo add proper link resolver
                                         .subscribe(links[0]["href"], this.handler);
                     this.subscriptions.set(protocol, subscription);
                 });

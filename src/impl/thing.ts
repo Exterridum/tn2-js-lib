@@ -20,14 +20,14 @@ export default class WebThing implements Thing {
     setProtocol(protocol: Protocol) {
        this.protocol = protocol;
     }
-    
+
     setEncoding(encoding: Encoding) {
         this.encoding = encoding;
     }
 
     addListener(event:string, eventListener:Events.ListenerCallback): Thing {
         let e = this.description.getEvent(event);
-        e.subscribe(eventListener, this.protocol);
+        e.subscribe(eventListener, this.protocol, this.encoding);
         return this;
     }
     
@@ -44,16 +44,18 @@ export default class WebThing implements Thing {
     }
 
     invokeAction(action:string, actionParams:any) : TrackablePromise<Object> {
-        let a = this.description.getAction(action);        
-        return a.invoke(actionParams, this.protocol);
+        return this.description.getAction(action)
+                               .invoke(actionParams, this.protocol, this.encoding);
     }
 
     getProperty(property:string) : Promise<any> {        
-        return this.description.getProperty(property).getValue(this.protocol);
+        return this.description.getProperty(property)
+                               .getValue(this.protocol, this.encoding);
     }
 
     setProperty(property:string, value:any) {
-        return this.description.getProperty(property).setValue(value, this.protocol);
+        return this.description.getProperty(property)
+                               .setValue(value, this.protocol, this.encoding);
     }
 
     getDescription():Object {

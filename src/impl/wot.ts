@@ -4,6 +4,7 @@ import WebThing from "./thing";
 import {UriUtils, StringUtils} from "../common/utils";
 import {Resolver} from "../net/resolver";
 import ThingDescription from "./description";
+import Encoding from "../encoding/encoding";
 
 export default class WebOfThings implements Things {
     
@@ -19,7 +20,7 @@ export default class WebOfThings implements Things {
 
         let protocol = UriUtils.getProtocolFromUri(this.discoveryUri);
         return Resolver
-            .resolve(protocol)
+            .resolve(protocol, Encoding.JSON)
             .getLinks(this.discoveryUri)
             .then((response) => {
                 let promises = [];
@@ -41,7 +42,7 @@ export default class WebOfThings implements Things {
         let protocol = UriUtils.getProtocolFromUri(this.discoveryUri);
 
         return Resolver
-            .resolve(protocol)
+            .resolve(protocol, Encoding.JSON)
             .getThing(uri)
             .then((description) => {
                 return new Promise((resolve) => {

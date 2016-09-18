@@ -1,6 +1,5 @@
 import Description from "../api/description";
 import Protocol from "../net/protocol";
-import Model from "../api/Model";
 import Action from "../api/action";
 import Events from "../api/event";
 import Property from "../api/property";
@@ -44,18 +43,24 @@ export default class ThingDescription implements Description {
         return this.description;
     }
 
+    getEncodings() : Set<Encoding> {
+        return this.encodings;
+    }
+
+    // TODO implement correctly
     getDefaultEncoding() : Encoding {
         for(let encoding in this.encodings.values()) {
             return Encoding[encoding];
         }
-        throw new TypeError();
+        return Encoding.JSON;
     }
 
+    // TODO implement correctly
     getDefaultProtocol() : Protocol {
         for(let protocol in this.uris.keys()) {
            return Protocol[protocol];
         }
-        throw new TypeError();
+        return Protocol.HTTP;
     }
 
     private get(map, name):any {

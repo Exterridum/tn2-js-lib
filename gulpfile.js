@@ -19,7 +19,7 @@ gulp.task("js", () => {
             .transform(babelify, { presets: ["es2015"] })
             .bundle()
             .pipe(source('bundle.js'))
-            .pipe(gulp.dest("test/app"));
+            .pipe(gulp.dest("sample/app"));
 });
 
 gulp.task("dist", ["js"]);

@@ -14,7 +14,7 @@ app.ws("/some/event", (ws, req) => {
   });
 });
 
-app.use('/app', express.static('test/app'));
+app.use('/app', express.static('sample/app'));
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');

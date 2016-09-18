@@ -1,6 +1,12 @@
+import Encoder from "./encoder";
 
+export default class XmlEncoder implements Encoder{
 
+    encode(data: any): any {
+        return null;
+    }
 
-export default class XmlEncoder {
-    
+    decode(data: any): any {
+        return null;
+    }
 }
